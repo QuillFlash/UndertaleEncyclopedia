@@ -1,6 +1,7 @@
-import javax.swing.*;
 import io.materialtheme.darkstackoverflow.DarkStackOverflowTheme;
-import mdlaf.*;
+import mdlaf.MaterialLookAndFeel;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,6 +30,7 @@ public class UEMainPage extends JFrame
     public static void main(String[] args)
     {
         UEMainPage mainPage = new UEMainPage();
+        mainPage.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainPage.setContentPane(mainPage.UEMainPagePanel);
         mainPage.setTitle("Undertale Encyclopedia - Main Page");
         mainPage.setSize(800, 800);
