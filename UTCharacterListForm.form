@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="cd54f" class="javax.swing.JLabel" binding="characterPageTitle">
+      <component id="cd54f" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -17,7 +17,7 @@
           <text value="Characters"/>
         </properties>
       </component>
-      <component id="3eb7f" class="javax.swing.JLabel" binding="characterNameLabel">
+      <component id="3eb7f" class="javax.swing.JLabel">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -25,14 +25,6 @@
           <font name="JetBrains Mono" size="14"/>
           <text value="Name:"/>
         </properties>
-      </component>
-      <component id="712c" class="javax.swing.JTextPane" binding="characterSQLName">
-        <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties/>
       </component>
       <component id="f84d3" class="javax.swing.JLabel">
         <constraints>
@@ -43,17 +35,9 @@
           <text value="Description:"/>
         </properties>
       </component>
-      <component id="90401" class="javax.swing.JTextPane" binding="characterSQLDescription">
-        <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
       <component id="43a72" class="javax.swing.JButton" binding="previousCharacterButton">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <icon value="imgs/left_arrow.png"/>
@@ -62,7 +46,7 @@
       </component>
       <component id="d2892" class="javax.swing.JLabel" binding="characterSQLImage">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value=""/>
@@ -70,7 +54,7 @@
       </component>
       <component id="a97d0" class="javax.swing.JButton" binding="nextCharacterButton">
         <constraints>
-          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <icon value="imgs/right_arrow.png"/>
@@ -83,6 +67,24 @@
         </constraints>
         <properties>
           <text value="New Entry"/>
+        </properties>
+      </component>
+      <component id="eb406" class="javax.swing.JLabel" binding="characterSQLName">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Droid Serif" size="14"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="42efb" class="javax.swing.JLabel" binding="characterSQLDescription">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Droid Serif" size="14"/>
+          <text value=""/>
         </properties>
       </component>
     </children>

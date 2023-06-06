@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UEDBZoneTable
+public class UEDBTableRepresentation
 {
     private int id;
     private Icon image;

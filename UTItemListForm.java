@@ -1,19 +1,24 @@
 import io.materialtheme.darkstackoverflow.DarkStackOverflowTheme;
 import mdlaf.MaterialLookAndFeel;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class UTItemListForm extends JFrame
+import javax.swing.*;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class UTItemListForm extends JFrame implements RowViewButtonClick
 {
 
-    private JTextPane itemSQLName;
-    private JTextPane itemSQLDescription;
     private JLabel itemSQLImage;
     private JButton previousItemButton;
     private JButton nextItemButton;
     private JButton newEntryButton;
     private JPanel UTItemListFormPanel;
+    private JLabel itemSQLName;
+    private JLabel itemSQLDescription;
+    Connection connection = ConnectToDatabase.getConnection();
+    private ResultSet sqlResultSet;
 
     public JPanel getUTItemListFormPanel()
     {
@@ -33,33 +38,97 @@ public class UTItemListForm extends JFrame
     }
     public UTItemListForm()
     {
-        previousItemButton.addActionListener(new ActionListener()
+        try
         {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent)
+            PreparedStatement preparedDataQueryStatement = connection.prepareStatement("SELECT * FROM items WHERE id = 1;");
+            sqlResultSet = preparedDataQueryStatement.executeQuery();
+            if (sqlResultSet.next())
             {
+                InputStream imageStream = sqlResultSet.getBinaryStream("image");
+                String name = sqlResultSet.getString("name");
+                String description = sqlResultSet.getString("description");
+                UEDBTableRepresentation characterTableRepresentation = new UEDBTableRepresentation();
+                Icon imageIcon = characterTableRepresentation.setImage(imageStream);
+                characterTableRepresentation.setName(name);
+                characterTableRepresentation.setDescription(description);
+                itemSQLImage.setIcon(imageIcon);
+                itemSQLName.setText(name);
+                itemSQLDescription.setText(description);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "No results found");
+            }
+            initialiseUI();
+        }
+        catch (Exception exception)
+        {
+            JOptionPane.showMessageDialog(null, "Oops, an error occurred. Here's the error's full description:\n" + exception);
+        }
+    }
 
-            }
-        });
-        nextItemButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent)
-            {
 
-            }
-        });
-        newEntryButton.addActionListener(new ActionListener()
+    private void initialiseUI()
+    {
+        previousItemButton.addActionListener(actionEvent -> actionOnLeftButtonClick(sqlResultSet));
+        nextItemButton.addActionListener(actionEvent -> actionOnRightButtonClick(sqlResultSet));
+        newEntryButton.addActionListener(actionEvent ->
         {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent)
-            {
-                AddDBEntriesForm dbEntriesForm = new AddDBEntriesForm();
-                dbEntriesForm.setContentPane(dbEntriesForm.getAddDBEntriesFormPanel());
-                dbEntriesForm.setTitle("Undertale Encyclopedia - New Entry");
-                dbEntriesForm.setSize(600, 600);
-                dbEntriesForm.setVisible(true);
-            }
+            AddDBEntriesForm dbEntriesForm = new AddDBEntriesForm();
+            dbEntriesForm.setContentPane(dbEntriesForm.getAddDBEntriesFormPanel());
+            dbEntriesForm.setTitle("Undertale Encyclopedia - New Entry");
+            dbEntriesForm.setSize(600, 600);
+            dbEntriesForm.setVisible(true);
         });
+    }
+
+    @Override
+    public void actionOnLeftButtonClick(ResultSet resultSet)
+    {
+        try
+        {
+            PreparedStatement preparedDataQueryStatement = connection.prepareStatement("SELECT * FROM items WHERE NOT id = 1;");
+            resultSet = preparedDataQueryStatement.executeQuery();
+            if (resultSet.isFirst())
+            {
+                previousItemButton.setVisible(false);
+            }
+            else
+            {
+                if (resultSet.previous())
+                {
+                    ElementStorage.storeElements(resultSet, itemSQLImage, itemSQLName, itemSQLDescription);
+                }
+                nextItemButton.setVisible(true);
+            }
+        } catch (Exception exception) {
+            JOptionPane.showMessageDialog(null, "Ooops, an error occurred. Here's the error's full description:\n" + exception);
+        }
+    }
+
+    @Override
+    public void actionOnRightButtonClick(ResultSet resultSet)
+    {
+        try
+        {
+            PreparedStatement preparedDataQueryStatement = connection.prepareStatement("SELECT * FROM items WHERE NOT id = 1;");
+            resultSet = preparedDataQueryStatement.executeQuery();
+            if (resultSet.isLast())
+            {
+                nextItemButton.setVisible(false);
+            }
+            else
+            {
+                if (resultSet.next())
+                {
+                    ElementStorage.storeElements(resultSet, itemSQLImage, itemSQLName, itemSQLDescription);
+                }
+                previousItemButton.setVisible(true);
+            }
+        }
+        catch (Exception exception)
+        {
+            JOptionPane.showMessageDialog(null, "Ooops, an error occurred. Here's the error's full description:\n" + exception);
+        }
     }
 }

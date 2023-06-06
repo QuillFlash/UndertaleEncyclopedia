@@ -6,14 +6,9 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class UTZoneListForm extends JFrame implements RowViewButtonClick
 {
-
-    private JLabel zonePageTitle;
-    private JLabel zoneNameLabel;
-    private JLabel zoneDescriptionLabel;
     private JLabel zoneSQLImage;
     private JLabel zoneSQLName;
     private JLabel zoneSQLDescription;
@@ -21,8 +16,8 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
     private JButton previousZoneButton;
     private JButton newEntryButton;
     private JPanel UTZoneListFormPanel;
-    private ResultSet sqlResultSet;
     Connection connection = ConnectToDatabase.getConnection();
+    private ResultSet sqlResultSet;
 
     public JPanel getUTZoneListFormPanel()
     {
@@ -52,7 +47,7 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
                 InputStream imageStream = sqlResultSet.getBinaryStream("image");
                 String name = sqlResultSet.getString("name");
                 String description = sqlResultSet.getString("description");
-                UEDBZoneTable zoneTable = new UEDBZoneTable();
+                UEDBTableRepresentation zoneTable = new UEDBTableRepresentation();
                 Icon imageIcon = zoneTable.setImage(imageStream);
                 zoneTable.setName(name);
                 zoneTable.setDescription(description);
@@ -92,6 +87,8 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
     {
         try
         {
+            PreparedStatement preparedDataQueryStatement = connection.prepareStatement("SELECT * FROM zones;");
+            resultSet = preparedDataQueryStatement.executeQuery();
             if (resultSet.isFirst())
             {
                 previousZoneButton.setVisible(false);
@@ -100,15 +97,13 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
             {
                 if (resultSet.previous())
                 {
-                    int id = resultSet.getInt(("id"));
-                    if (id > 0)
-                    {
-                        storeElements(resultSet, id);
-                    }
+                    ElementStorage.storeElements(resultSet, zoneSQLImage, zoneSQLName, zoneSQLDescription);
                 }
                 nextZoneButton.setVisible(true);
             }
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             JOptionPane.showMessageDialog(null, "Ooops, an error occurred. Here's the error's full description:\n" + exception);
         }
     }
@@ -118,6 +113,8 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
     {
         try
         {
+            PreparedStatement preparedDataQueryStatement = connection.prepareStatement("SELECT * FROM zones;");
+            resultSet = preparedDataQueryStatement.executeQuery();
             if (resultSet.isLast())
             {
                 nextZoneButton.setVisible(false);
@@ -126,11 +123,7 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
             {
                 if (resultSet.next())
                 {
-                    int id = resultSet.getInt(("id"));
-                    if (id > 0)
-                    {
-                        storeElements(resultSet, id);
-                    }
+                    ElementStorage.storeElements(resultSet, zoneSQLImage, zoneSQLName, zoneSQLDescription);
                 }
                 previousZoneButton.setVisible(true);
             }
@@ -138,25 +131,6 @@ public class UTZoneListForm extends JFrame implements RowViewButtonClick
         catch (Exception exception)
         {
             JOptionPane.showMessageDialog(null, "Ooops, an error occurred. Here's the error's full description:\n" + exception);
-        }
-    }
-
-    private void storeElements(ResultSet resultSet, int id)
-    {
-        try
-        {
-            UEDBZoneTable tableElements = new UEDBZoneTable();
-            tableElements.setId(id);
-            tableElements.setImage(resultSet.getBinaryStream("image"));
-            tableElements.setName(resultSet.getString("name"));
-            tableElements.setDescription(resultSet.getString("description"));
-            zoneSQLImage.setIcon(tableElements.getImage());
-            zoneSQLName.setText(tableElements.getName());
-            zoneSQLDescription.setText(tableElements.getDescription());
-        }
-        catch (SQLException sqlException)
-        {
-            JOptionPane.showMessageDialog(null, "Ooops, an error occurred. Here's the error's full description:\n" + sqlException);
         }
     }
 }
